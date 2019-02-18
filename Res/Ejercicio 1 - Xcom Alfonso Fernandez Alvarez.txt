@@ -1,0 +1,29 @@
+Ejercicio 1:
+/productos/producto/denominacion|/productos/producto/precio
+
+Ejercicio 2:
+/productos/producto[(denominacion='placa base')]
+
+Ejercicio 3:
+/productos/producto[codigo_zona='20' and precio>60]
+
+Ejercicio 4:
+/productos/producto[codigo_zona='10' and denominacion='memoria']
+
+Ejercicio 5:
+avg(/productos/producto[denominacion='microprocesador']/precio)
+
+Ejercicio 6:
+/productos/producto[stock_minimo>=stock_actual]
+
+Ejercicio 7:
+/productos/producto[stock_minimo<=stock_actual and codigo_zona=40]/(precio|denominacion)
+
+Ejercicio 8:
+/productos/producto[precio=max(/productos/producto/precio)]
+
+Ejercicio 9:
+/productos/producto[precio= min(/productos/producto[codigo_zona='20']/precio)]
+
+Ejercicio 10:
+/productos/producto[precio= max(/productos/producto[codigo_zona='10']/precio)]

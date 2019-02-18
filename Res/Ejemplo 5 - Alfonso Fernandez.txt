@@ -1,0 +1,27 @@
+for $dep in /universidad/departamento
+for $pue in distinct-values($dep/empleado/puesto)
+let $cu:=count($dep/empleado[puesto=$pue])
+return <depart>{data($dep/nombre)}<puesto>{data($pue)}</puesto>
+    <profes>{$cu}</profes>
+</depart>
+
+for $dep in /universidad/departamento
+for $emp in $dep/empleado
+let $emple:=$emp/nombre
+let $sal:=$emp/@salario
+return if ($sal = $dep/max(empleado/@salario))
+then    
+    <departa>{data($dep/nombre)}<salamax>{data($sal)}</salamax>
+    <empleado>{data($emple)}</empleado>    
+    </departa>
+else ()
+
+for $pue in distinct-values (/universidad/departamento/empleado/puesto)
+for $emp in /universidad/departamento/empleado[puesto=$pue]
+let $sal:= $emp/@salario
+let $nom:= $emp/nombre
+return 
+    if($sal = max($emp/@salario))
+    then
+        <puesto>{data($pue)}<maxsal>{data($sal)}</maxsal><emple>{data($nom)}</emple></puesto>
+    else ()

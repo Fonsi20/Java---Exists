@@ -1,0 +1,41 @@
+xquery version "3.0";
+
+update insert
+<zona><cod_zona>50</cod_zona>
+    <nombre>Madrid-OESTE</nombre>
+    <director>Alicia Ramos Martín</director>
+</zona>
+into /zonas,
+
+update insert
+<cuenta tipo="PENSIONES"><nombre>Alberto Morales</nombre>
+<numero>30302900</numero>
+<aportacion>5000</aportacion></cuenta>
+into /sucursales/sucursal[@codigo="SUC1"],
+
+for $de in doc('file:///D:/XML/pruebaxquery/nuevos_dep.xml') /nuevos_dep/dep_row
+return update insert $de into /departamentos,
+
+update replace 
+/zonas/zona[cod_zona=50]/director
+with <directora>Pilar Martin Ramos</directora>,
+
+update replace
+/departamentos/dep_row[dept_no=10]
+with
+<dept_row><dept_no>10</dept_no>
+<dnombre>nuevo10</dnombre>
+<loc>talavera</loc></dept_row>,
+
+update value /empleados/emp_row[emp_no=7369]/apellido with'alberto montes ramos',
+
+update value /sucursales/sucursal[@codigo='SUC3']/cuenta[1]/@tipo with 'nuevotipo',
+
+for $em in /empleados/emp_row[dept_10]
+let $sal:= $em/salario
+return update value $em/salario
+with data($sal)+200,
+
+update delete /zonas/zona[cod_zona=50],
+
+update rename /empleados/emp_row as 'fila_emple'

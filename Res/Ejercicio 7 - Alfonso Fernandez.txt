@@ -1,0 +1,12 @@
+update insert
+<empleado salario="2340">
+	<puesto>Técnico</puesto>
+	<nombre>Pedro Fraile</nombre>
+</empleado>
+into /universidad/departamento[2]
+
+for $em in /universidad/departamento[codigo="mat1"]/empleado
+let $salario:= $em/salario
+return update value $em/salario with data($salario)+100
+
+update rename /departamentos/dep_row as "filadepar"

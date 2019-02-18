@@ -1,0 +1,28 @@
+for $zona in distinct-values (/productos/producto/codigo_zona)
+let $cu:= count(/productos/producto[codigo_zona=$zona])
+return concat('Zona ',$zona ,' = Numero de productos ' ,$cu),
+
+for $produ in /productos/producto return
+if ($produ/codigo_zona='5')
+then <zona5>{data($produ/denominacion)}</zona5>
+else if ($produ/codigo_zona='10')
+then <zona10>{data($produ/denominacion)}</zona10>
+else if ($produ/codigo_zona='20')
+then <zona20>{data($produ/denominacion)}</zona20>
+else <zona40>{data($produ/denominacion)}</zona40>,
+
+for $produ in distinct-values(/productos/producto/codigo_zona)
+let $precio:= max(/productos/producto[codigo_zona=$produ]/precio)
+let $nombre:= /productos/producto[precio=$precio]/denominacion
+return concat('Codigo zona:',$produ, '   Precio: ',$precio, '   Denominacion:',$nombre),
+
+for $produ in /productos/producto/denominacion return
+if (starts-with(data($produ),'placa')) then <placa>{data($produ)}</placa>
+else if (starts-with(data($produ),'memoria')) then <memoria>{data($produ)}</memoria>
+else if (starts-with(data($produ),'micro')) then <micro>{data($produ)}</micro>
+else <otros>{data($produ)}</otros>,
+
+for $sucur in /sucursales/sucursal/@CODIGO
+let $couA:= count(/sucursales/sucursal[@CODIGO = $sucur]/cuenta[@TIPO="AHORRO"])
+let $couP:= count(/sucursales/sucursal[@CODIGO = $sucur]/cuenta[@TIPO="PENSIONES"])
+return concat ('Sucursal ',$sucur, ' Cuentas ahorro ',$couA,' Cuentas pensiones ',$couP)

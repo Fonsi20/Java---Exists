@@ -1,0 +1,13 @@
+for $p in /productos/producto
+let $nomz:=(/zonas/zona_row[@codigo_zona=$p/codigo_zona]/nombre)
+return concat('Producto: ',$p/denominacion,', precio = ', $p/precio,', nombre zona: ',$nomz),
+
+for $z in /zonas/zona_row
+let $prod:=count(/productos/producto[codigo_zona=$z/@codigo_zona])
+return concat('Nombre: ',$z/nombre,', productos: ',$prod),
+
+
+for $z in /zonas/zona_row
+let $prod:=count(/productos/producto[codigo_zona=$z/@codigo_zona])
+let $nprod:=min(/productos/producto[codigo_zona=$z/@codigo_zona]/stock_actual)
+return concat('Nombre: ',$z/nombre,', codigo',$z/@codigo_zona,', menos stock: ',/productos/producto[codigo_zona=$z/@codigo_zona and stock_actual=$nprod]/denominacion)

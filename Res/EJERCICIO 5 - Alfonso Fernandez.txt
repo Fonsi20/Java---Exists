@@ -1,0 +1,32 @@
+for $sucursales in /sucursales/sucursal
+let $cuenta:= $sucursales/cuenta[SALDO_HABER=max($sucursales/cuenta/SALDO_HABER)]
+return
+<Sucur>{$sucursales/@CODIGO} <cuenta>{data($cuenta/NOMBRE)}<saldo>{data($cuenta/SALDO_HABER)}</saldo></cuenta></Sucur>,
+
+for $sucursales in /sucursales/sucursal
+let $cuenta:= $sucursales/cuenta[SALDO_DEBE=max($sucursales/cuenta[@TIPO="AHORRO"]/SALDO_DEBE)]
+order by data($cuenta/SALDO_DEBE)
+return
+<TipoCuenta>{$sucursales/@CODIGO} <cuenta>{data($cuenta/NOMBRE)}<saldo_que_debe>{data($cuenta/SALDO_DEBE)}</saldo_que_debe><tipo>{data($sucursales/cuenta/@TIPO)}</tipo></cuenta></TipoCuenta>,
+
+for $produ in /productos/producto
+let $nomb_zona:= /zonas/zona_row[@codigo_zona=$produ/codigo_zona]/nombre/text()
+return 
+<producto>{data($produ/denominacion)} <nombre_Zona>{data($nomb_zona)}</nombre_Zona></producto> 
+
+for $produ in /productos/producto[stock_minimo>5]
+for $zona in /zonas/zona_row[@codigo_zona=$produ/codigo_zona]
+let $nombZona:=$zona/nombre/text()
+return
+<Produ>
+	{data($produ/denominacion)}
+	<codigoZona>
+		{data($produ/codigo_zona)}
+	</codigoZona>
+	<nombre_zona>
+		{data($nombZona)}
+	</nombre_zona>
+	<director_zona>
+		{data($zona/director)}
+	</director_zona>
+</Produ>

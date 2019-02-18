@@ -1,0 +1,22 @@
+for $emp in /empleados/emp_row
+order by $emp/apellido
+return if ($emp/oficio='director')
+then <director>{$emp/apellido/text()}</director>
+ else <emple>{data($emp/apellido)}</emple>,
+
+for $prof in /universidad/departamento[@tipo='a']/empleado let $profe:=$prof/nombre,
+$puesto:=$prof/puesto where $puesto='profesor'return $profe,
+
+for $dep in /universidad/departamento return if ($dep/@tipo='a')
+then <tipoA>{data($dep/nombre)}</tipoA>
+else <tipoB>{data($dep/nombre)}</tipoB>,
+
+for $dep in /universidad/departamento let $nom:= $dep/empleado
+return <depart>{data($dep/nombre)}
+<emple>{count($nom)}</emple></depart>,
+
+for $dep in /universidad/departamento
+let $emp := $dep/empleado
+let $sal := $dep/empleado/@salario
+return <depart>{data($dep/nombre)}
+<emple>{count($emp)}</emple><medsal>{avg($sal)}</medsal></depart>

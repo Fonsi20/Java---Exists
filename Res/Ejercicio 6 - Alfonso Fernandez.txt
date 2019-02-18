@@ -1,0 +1,48 @@
+let $nuevo:= <productos_nuevo>
+		<producto>
+			<cod_prod>1023</cod_prod>
+			<denominacion>HD externo Seagate</denominacion>
+			<expansion>250GB</expansion>
+			<precio>70</precio>
+			<stock_actual>100</stock_actual>
+			<stock_minimo>20</stock_minimo>
+			<cod_zona>{data(/zonas/zona_row[nombre="andalucía"]/@codigo_zona)}</cod_zona>
+		</producto>
+	</productos_nuevo>
+return $nuevo
+
+let $titulo:=<titulo>datos de los productos de la zona 30</titulo>
+	
+return <productos_30>
+		{titulo}
+		{
+		for $prod in /productos/producto[cod_zona=30]
+		return $prod
+		}
+	</productos_30>
+ 
+for $productos in /productos
+return <productos>
+		{
+		for $prod in /productos/producto
+		let $newprecio:= 1.03 * number($prod/precio)
+		let $newstock:= 10 + number($prod/stock_actual)
+		return
+			<producto>
+				{$prod/codigo_producto, $prod/denominacion} <precio>{$newprecio}</precio><stock_actual>{$newstock}</stock_actual> {$prod/stock_minimo, $prod/codigo_zona}
+			</producto>
+		}
+</productos>
+
+
+for $prod in /productos/producto
+let $newproducto:=
+    	<producto>
+		{$prod/codigo_producto}
+		{$prod/denominacion}
+		{1.03 * number($prod/precio)}
+		{10 + number($prod/stock_actual)}
+		{$prod/stock_minimo}
+		{$prod/codigo_zona}
+	</producto>
+return $prod

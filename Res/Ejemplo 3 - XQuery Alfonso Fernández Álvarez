@@ -1,0 +1,13 @@
+
+for $ofi in /empleados/emp_row/oficio
+where starts-with(data($ofi),'p')
+return $ofi,
+
+for $ofi in distinct-values(/empleados/emp_row/oficio)
+let $cu:=count(/empleados/emp_row[oficio=$ofi])
+return concat($ofi,'=',$cu),
+
+for $dep in distinct-values(/empleados/emp_row/dept_no)
+let$cu:=count(/empleados/emp_row[dept_no=$dep])
+let $sala:= round(avg(/empleados/emp_row[dept_no=$dep]/salario))
+return concat('departamento:',$dep,'. Num emples=',$cu,'. Media salario =',$sala),

@@ -1,0 +1,15 @@
+/sucursales/sucursal/cuenta[@TIPO='AHORRO'],
+
+/sucursales/sucursal/concat(@CODIGO, "-" ,cuenta[@TIPO='AHORRO']/NUMERO),
+
+/sucursales/sucursal[@CODIGO='SUC3']/cuenta[@TIPO='PENSIONES'],
+
+/sucursales/sucursal/concat(@CODIGO, "-" ,DIRECTOR, "-" ,sum(cuenta/SALDO_HABER)),
+
+/sucursales/sucursal[count(cuenta)>3],
+
+/sucursales/sucursal[count(cuenta[@CODIGO='AHORRO'])>3],
+
+count(/sucursales/sucursal[POBLACION='Madrid']),
+/sucursales/sucursal/concat(@CODIGO, "-" ,sum(cuenta[@TIPO='PENSIONES']/SALDO_HABER))
+

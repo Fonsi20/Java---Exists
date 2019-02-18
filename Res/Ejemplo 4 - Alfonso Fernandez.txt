@@ -1,0 +1,28 @@
+for $emp in (/empleados/emp_row)
+let $emple:= $emp/apellido
+let $dep:= $emp/dept_no
+let$dnom:= (/departamentos/dep_row[dept_no = $dep]/dnombre)
+return <res>{$emple,$dep,$dnom}</res>
+
+for $dep in /departamentos/dep_row
+let $d:=$dep/dept_no
+let $tot:=sum(/empleados/emp_row[dept_no=$d]/salario)
+let $cu:=count(/empleados/emp_row[dept_no=$d]/emp_no)
+return <res>{$dep/dnombre}<sumsal>{$tot}</sumsal><totem>{$cu}</totem></res>
+
+for $dep in /departamentos/dep_row
+let $d := $dep/dept_no
+let $tot := sum(/empleados/emp_row[dept_no=$d]/salario)
+let $cu := count(/empleados/emp_row[dept_no=$d]/emp_no)
+return concat ('<departamento sumasalario="',$tot,'" totemple="',$cu,'">',data($dep/dnombre),'</departamento>')
+
+
+for $emp in /empleados/emp_row
+let $d:=$emp/dept_no, $nom:=$emp/apellido,$sal :=$emp/salario
+let $ndep:=(/departamentos/dep_row[dept_no=$d])/dnombre
+let $salmax:=max(/empleados/emp_row[dept_no=$d]/salario)
+return 
+if($sal=$salmax)
+then
+<depart>{data($ndep)}<salmax>{data($sal)}</salmax><emple>{data($nom)}</emple></depart>
+else ()

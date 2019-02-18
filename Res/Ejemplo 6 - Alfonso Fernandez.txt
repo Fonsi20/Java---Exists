@@ -1,0 +1,42 @@
+xquery version "3.0";
+
+let $titulo:=/departamentos/titulo
+return <departamentos>{$titulo}
+{for $dep in (/departamentos/dep_row)
+where data(($dep/dept_no))!=10
+return $dep}
+</departamentos>,
+
+let $titulo :=/departamentos/titulo
+let $dnombre:=/departamentos/dep_row[dept_no=20]/dnombre/text()
+let $modig:=<dep_row><dept_no>20</dept_no><dnombre>{$dnombre}</dnombre><loc>GRANADA</loc></dep_row>
+return <departamentos>{$titulo}
+{for $dep in(/departamentos/dep_row)
+return
+if ($dep/dept_no/text()=20) then $modig
+else $dep}
+</departamentos>,
+
+for $em in /empleados/emp_row
+let $no:=$em/emp_no, $ape:=$em/apellido, $ofi:=$em/oficio, $dir:=$em/dir
+let $fec:=$em/fecha_alt, $de:=$em/dept_no, $sal:=$em/salario
+let $salnue:=200+number($em/salario/text())
+return
+    if($em/dept_no/text()=10)then
+        <emp_row>{$no, $ape, $ofi, $dir, $fec}<salario>{$salnue}</salario>{$de}</emp_row>
+        else $em,
+
+let $titulo:=/empleados/titulo
+return <empleados>
+    {$titulo}
+    {
+        for $em in /empleados/emp_row
+        let $no:=$em/emp_no, $ape:=$em/apellido, $ofi:=$em/oficio, $dir:=$em/dir
+        let $fec:=$em/fecha_alt, $de:=$em/dept_no, $sal:=$em/salario
+        let $salnue:=200+ number($em/salario/text())
+        return
+            if ($em/dept_no/text()=10) then
+                <emp_row>{$no,$ape,$ofi,$dir,$fec}<salario>{$salnue}</salario></emp_row>
+                else $em
+    }
+    </empleados>
